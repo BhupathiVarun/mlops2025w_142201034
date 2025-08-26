@@ -1,0 +1,8 @@
+README.md
+main.py
+pyproject.toml
+week4.egg-info/PKG-INFO
+week4.egg-info/SOURCES.txt
+week4.egg-info/dependency_links.txt
+week4.egg-info/requires.txt
+week4.egg-info/top_level.txt
