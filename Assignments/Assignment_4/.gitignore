@@ -1,10 +1,123 @@
-# Python
-.venv/
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 
-# Data - Don't upload large data files to Git
-data/
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.env.local
+.env.production
 
 # Database files
 *.db
+*.sqlite
+*.sqlite3
+
+# MongoDB data
+mongodb_data/
+mongo_logs/
+
+# Configuration files with secrets
+config.ini
+credentials.json
+mongodb_credentials.txt
+
+# Performance test results
+performance_results/
+benchmark_outputs/
+*.csv
+*.json
+!requirements.json
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Keep the Excel data file but exclude processed data
+data/processed/
+data/temp/
+!data/Online\ Retail.xlsx
+
+# Generated reports (keep template, exclude generated ones)
+reports/generated/
+performance_reports/
+
+# Atlas deployment specific
+atlas_config.json
+cluster_credentials.txt
+
+# Logs
+*.log
+logs/
