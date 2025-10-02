@@ -103,7 +103,7 @@ class AtlasDeployment:
             
             # Test connection
             self.client.admin.command('ping')
-            logger.info("✅ Successfully connected to MongoDB Atlas")
+            logger.info(" Successfully connected to MongoDB Atlas")
             
             # Get database reference
             self.database = self.client[self.config.database_name]
@@ -111,7 +111,7 @@ class AtlasDeployment:
             return True
             
         except Exception as e:
-            logger.error(f"❌ Failed to connect to MongoDB Atlas: {str(e)}")
+            logger.error(f" Failed to connect to MongoDB Atlas: {str(e)}")
             return False
     
     def create_collections(self) -> bool:
@@ -172,15 +172,15 @@ class AtlasDeployment:
                         else:
                             # Single field index
                             collection.create_index(index_spec)
-                        logger.info(f"✅ Created index {index_spec} on {collection_name}")
+                        logger.info(f" Created index {index_spec} on {collection_name}")
                     except Exception as e:
-                        logger.warning(f"⚠️ Index creation warning for {collection_name}: {str(e)}")
+                        logger.warning(f" Index creation warning for {collection_name}: {str(e)}")
             
-            logger.info("✅ Collections and indexes created successfully")
+            logger.info(" Collections and indexes created successfully")
             return True
             
         except Exception as e:
-            logger.error(f"❌ Failed to create collections: {str(e)}")
+            logger.error(f" Failed to create collections: {str(e)}")
             return False
     
     def upload_data_from_local(self, local_data_path: str = "../data/Online Retail.xlsx") -> bool:
@@ -200,12 +200,12 @@ class AtlasDeployment:
             
             # Check if file exists
             if not os.path.exists(local_data_path):
-                logger.error(f"❌ Data file not found: {local_data_path}")
+                logger.error(f" Data file not found: {local_data_path}")
                 return False
             
             # Load Excel data
             df = pd.read_excel(local_data_path, dtype_backend='numpy_nullable')
-            logger.info(f"✅ Loaded {len(df)} records from Excel file")
+            logger.info(f" Loaded {len(df)} records from Excel file")
             
             # Clean and prepare data
             df = self._clean_data(df)
@@ -226,7 +226,7 @@ class AtlasDeployment:
             self.stats.append(stat)
             
             if success:
-                logger.info(f"✅ Data upload completed in {stat.duration_seconds:.2f} seconds")
+                logger.info(f" Data upload completed in {stat.duration_seconds:.2f} seconds")
             
             return success
             
@@ -242,7 +242,7 @@ class AtlasDeployment:
             )
             self.stats.append(stat)
             
-            logger.error(f"❌ Data upload failed: {str(e)}")
+            logger.error(f" Data upload failed: {str(e)}")
             return False
     
     def _clean_data(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -278,7 +278,7 @@ class AtlasDeployment:
         # Clean country
         df['Country'] = df['Country'].fillna('Unknown')
         
-        logger.info(f"✅ Data cleaned. Final record count: {len(df)}")
+        logger.info(f" Data cleaned. Final record count: {len(df)}")
         return df
     
     def _upload_data_in_batches(self, df: pd.DataFrame, batch_size: int = 1000) -> bool:
@@ -355,11 +355,11 @@ class AtlasDeployment:
             # Create product catalog
             self._create_product_documents(df, products_coll)
             
-            logger.info("✅ All data uploaded successfully")
+            logger.info(" All data uploaded successfully")
             return True
             
         except Exception as e:
-            logger.error(f"❌ Batch upload failed: {str(e)}")
+            logger.error(f" Batch upload failed: {str(e)}")
             return False
     
     def _upload_batch(self, collection, documents: List[Dict], doc_type: str):
@@ -367,9 +367,9 @@ class AtlasDeployment:
         try:
             if documents:
                 collection.insert_many(documents, ordered=False)
-                logger.debug(f"✅ Uploaded batch of {len(documents)} {doc_type}")
+                logger.debug(f" Uploaded batch of {len(documents)} {doc_type}")
         except Exception as e:
-            logger.warning(f"⚠️ Batch upload warning for {doc_type}: {str(e)}")
+            logger.warning(f" Batch upload warning for {doc_type}: {str(e)}")
     
     def _create_customer_documents(self, df: pd.DataFrame, collection):
         """Create customer-centric documents."""
@@ -419,7 +419,7 @@ class AtlasDeployment:
         if batch_docs:
             self._upload_batch(collection, batch_docs, 'customers')
         
-        logger.info("✅ Customer documents created")
+        logger.info(" Customer documents created")
     
     def _create_product_documents(self, df: pd.DataFrame, collection):
         """Create product catalog."""
@@ -460,7 +460,7 @@ class AtlasDeployment:
         if batch_docs:
             self._upload_batch(collection, batch_docs, 'products')
         
-        logger.info("✅ Product catalog created")
+        logger.info(" Product catalog created")
     
     def test_atlas_queries(self) -> bool:
         """
@@ -477,7 +477,7 @@ class AtlasDeployment:
             customers_count = self.database['customers_centric'].count_documents({})
             products_count = self.database['products'].count_documents({})
             
-            logger.info(f"📊 Collection counts:")
+            logger.info(f" Collection counts:")
             logger.info(f"   Transactions: {transactions_count:,}")
             logger.info(f"   Customers: {customers_count:,}")
             logger.info(f"   Products: {products_count:,}")
@@ -543,11 +543,11 @@ class AtlasDeployment:
             logger.info(f"📈 Monthly sales aggregation completed in {query_time:.2f}ms")
             logger.info(f"   Found {len(monthly_sales)} months of data")
             
-            logger.info("✅ All Atlas queries completed successfully")
+            logger.info(" All Atlas queries completed successfully")
             return True
             
         except Exception as e:
-            logger.error(f"❌ Atlas query testing failed: {str(e)}")
+            logger.error(f" Atlas query testing failed: {str(e)}")
             return False
     
     def setup_monitoring(self) -> bool:
@@ -612,11 +612,11 @@ class AtlasDeployment:
                     upsert=True
                 )
             
-            logger.info("✅ Monitoring setup completed")
+            logger.info(" Monitoring setup completed")
             return True
             
         except Exception as e:
-            logger.error(f"❌ Monitoring setup failed: {str(e)}")
+            logger.error(f" Monitoring setup failed: {str(e)}")
             return False
     
     def generate_deployment_report(self) -> str:
@@ -689,11 +689,11 @@ class AtlasDeployment:
                         f.write(f"  Error: {stat.error_message}\n")
                     f.write("\n")
             
-            logger.info(f"✅ Reports generated: {report_file}, {summary_file}")
+            logger.info(f" Reports generated: {report_file}, {summary_file}")
             return report_file
             
         except Exception as e:
-            logger.error(f"❌ Report generation failed: {str(e)}")
+            logger.error(f" Report generation failed: {str(e)}")
             return ""
     
     def cleanup_test_data(self):
@@ -705,21 +705,21 @@ class AtlasDeployment:
             self.database['transactions_centric'].delete_many({"customer_id": {"$regex": "^TEST"}})
             self.database['customers_centric'].delete_many({"_id": {"$regex": "^TEST"}})
             
-            logger.info("✅ Test data cleanup completed")
+            logger.info(" Test data cleanup completed")
             
         except Exception as e:
-            logger.warning(f"⚠️ Cleanup warning: {str(e)}")
+            logger.warning(f" Cleanup warning: {str(e)}")
     
     def disconnect(self):
         """Close Atlas connection."""
         if self.client:
             self.client.close()
-            logger.info("✅ Disconnected from MongoDB Atlas")
+            logger.info(" Disconnected from MongoDB Atlas")
 
 def setup_atlas_instructions():
     """Print setup instructions for MongoDB Atlas."""
     print("""
-    📋 MONGODB ATLAS SETUP INSTRUCTIONS
+     MONGODB ATLAS SETUP INSTRUCTIONS
     ═══════════════════════════════════════════
     
     1. Create MongoDB Atlas Account:
@@ -758,7 +758,7 @@ def setup_atlas_instructions():
        • Replace <username>, <password>, and <cluster-name> in the connection string
        • Use this information with the AtlasConfig class below
     
-    ⚠️  SECURITY NOTE: Never commit credentials to version control!
+      SECURITY NOTE: Never commit credentials to version control!
     """)
 
 def load_env_file():
@@ -772,7 +772,7 @@ def load_env_file():
                 if line and not line.startswith('#') and '=' in line:
                     key, value = line.split('=', 1)
                     os.environ[key] = value
-        print("✅ Environment variables loaded from .env file")
+        print(" Environment variables loaded from .env file")
         return True
     return False
 
@@ -792,7 +792,7 @@ def get_atlas_config():
         print("- ATLAS_DATABASE_NAME")
         
         # For demonstration, use example values
-        print("\n⚠️  Using example configuration for demo purposes...")
+        print("\n  Using example configuration for demo purposes...")
         return AtlasConfig(
             username="demo_user",
             password="demo_password", 
@@ -822,7 +822,7 @@ def main():
     config, is_real_config = get_atlas_config()
     
     if not is_real_config:
-        print("\n❌ Please run 'python atlas_setup.py' first to configure Atlas")
+        print("\n Please run 'python atlas_setup.py' first to configure Atlas")
         print("This will help you set up your MongoDB Atlas credentials properly.")
         return 1
     
@@ -831,37 +831,37 @@ def main():
     
     try:
         # Connect to Atlas
-        print(f"\n🌐 Connecting to Atlas cluster: {config.cluster_name}")
+        print(f"\n Connecting to Atlas cluster: {config.cluster_name}")
         if not deployment.connect():
-            print("❌ Failed to connect to Atlas. Please check your configuration.")
+            print(" Failed to connect to Atlas. Please check your configuration.")
             return 1
         
         # Create collections and indexes
-        print("\n🏗️ Setting up collections and indexes...")
+        print("\n Setting up collections and indexes...")
         if not deployment.create_collections():
-            print("❌ Failed to create collections")
+            print(" Failed to create collections")
             return 1
         
         # Upload data
-        print("\n📤 Uploading data to Atlas...")
+        print("\n Uploading data to Atlas...")
         if not deployment.upload_data_from_local():
-            print("❌ Data upload failed")
+            print(" Data upload failed")
             return 1
         
         # Test queries
-        print("\n🧪 Testing Atlas queries...")
+        print("\n Testing Atlas queries...")
         if not deployment.test_atlas_queries():
-            print("❌ Query testing failed")
+            print(" Query testing failed")
             return 1
         
         # Setup monitoring
-        print("\n📊 Setting up monitoring...")
+        print("\n Setting up monitoring...")
         if not deployment.setup_monitoring():
-            print("❌ Monitoring setup failed")
+            print(" Monitoring setup failed")
             return 1
         
         # Generate report
-        print("\n📋 Generating deployment report...")
+        print("\n Generating deployment report...")
         report_file = deployment.generate_deployment_report()
         
         # Clean up test data
@@ -871,21 +871,21 @@ def main():
         print(f"\n{'='*60}")
         print("🎉 MONGODB ATLAS DEPLOYMENT COMPLETED!")
         print(f"{'='*60}")
-        print(f"✅ Cluster: {config.cluster_name}")
-        print(f"✅ Database: {config.database_name}")
-        print(f"✅ Region: {config.region}")
+        print(f" Cluster: {config.cluster_name}")
+        print(f" Database: {config.database_name}")
+        print(f" Region: {config.region}")
         
         if report_file:
-            print(f"📄 Report: {report_file}")
+            print(f" Report: {report_file}")
         
-        print(f"\n🌐 Access your data at: https://cloud.mongodb.com/")
-        print(f"📊 Monitor performance in the Atlas dashboard")
+        print(f"\n Access your data at: https://cloud.mongodb.com/")
+        print(f" Monitor performance in the Atlas dashboard")
         
         return 0
         
     except Exception as e:
         logger.error(f"Deployment failed: {str(e)}")
-        print(f"\n❌ Error: {str(e)}")
+        print(f"\n Error: {str(e)}")
         return 1
         
     finally:

@@ -567,10 +567,10 @@ def main():
     results = db_setup.run_complete_setup(limit_records=10000)
     
     if results['success']:
-        print(f"\n✅ SQL Database setup completed successfully!")
-        print(f"📁 Database file created at: {results['database_file']}")
+        print(f"\n SQL Database setup completed successfully!")
+        print(f" Database file created at: {results['database_file']}")
     else:
-        print(f"\n❌ Setup failed: {results['error']}")
+        print(f"\ Setup failed: {results['error']}")
         return 1
     
     return 0

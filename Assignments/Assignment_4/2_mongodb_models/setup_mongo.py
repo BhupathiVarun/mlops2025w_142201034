@@ -647,13 +647,13 @@ def main():
     results = mongo_setup.run_complete_setup(limit_records=10000)
     
     if results['success']:
-        print(f"\n✅ MongoDB setup completed successfully!")
-        print(f"🗄️ Database: {results['connection_info']['database']}")
-        print(f"📊 Transaction Documents: {results['documents_created']['transaction_centric']:,}")
-        print(f"👥 Customer Documents: {results['documents_created']['customer_centric']:,}")
+        print(f"\n MongoDB setup completed successfully!")
+        print(f" Database: {results['connection_info']['database']}")
+        print(f" Transaction Documents: {results['documents_created']['transaction_centric']:,}")
+        print(f" Customer Documents: {results['documents_created']['customer_centric']:,}")
     else:
-        print(f"\n❌ Setup failed: {results['error']}")
-        print("\n💡 Troubleshooting tips:")
+        print(f"\n Setup failed: {results['error']}")
+        print("\n Troubleshooting tips:")
         print("1. Ensure MongoDB is running: mongod")
         print("2. Check connection details in the configuration")
         print("3. Verify MongoDB service is accessible on localhost:27017")

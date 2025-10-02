@@ -772,7 +772,7 @@ def main():
     # Check if required database files exist
     sql_db_path = "../1_sql_database/online_retail.db"
     if not os.path.exists(sql_db_path):
-        print(f"❌ SQL database not found at {sql_db_path}")
+        print(f" SQL database not found at {sql_db_path}")
         print("Please run setup_sql.py first to create the SQL database.")
         return 1
     
@@ -784,17 +784,17 @@ def main():
         with db_connections.mongo_connection() as mongo_db:
             collections = mongo_db.list_collection_names()
             if not collections:
-                print("❌ MongoDB collections not found")
+                print(" MongoDB collections not found")
                 print("Please run setup_mongo.py first to create MongoDB collections.")
                 return 1
         
-        print("✅ Database connections verified")
+        print(" Database connections verified")
         
         # Initialize tester
         tester = CRUDTester(db_connections)
         
         # Run all CRUD tests
-        print("\n🔄 Running CRUD performance tests...")
+        print("\n Running CRUD performance tests...")
         results = tester.run_all_crud_tests(iterations=3)
         
         # Analyze results
@@ -811,23 +811,23 @@ def main():
         print(f"\n{'='*60}")
         print("PERFORMANCE COMPARISON COMPLETED!")
         print(f"{'='*60}")
-        print(f"📊 Total Tests: {analysis['total_tests']}")
-        print(f"✅ Successful: {analysis['successful_tests']}")
-        print(f"❌ Failed: {analysis['failed_tests']}")
-        print(f"\n📈 Average Execution Times:")
+        print(f" Total Tests: {analysis['total_tests']}")
+        print(f" Successful: {analysis['successful_tests']}")
+        print(f" Failed: {analysis['failed_tests']}")
+        print(f"\n Average Execution Times:")
         print(f"   SQL: {analysis['sql_stats']['avg_execution_time_ms']:.2f}ms")
         print(f"   MongoDB: {analysis['mongodb_stats']['avg_execution_time_ms']:.2f}ms")
-        print(f"\n💾 Average Memory Usage:")
+        print(f"\n Average Memory Usage:")
         print(f"   SQL: {analysis['sql_stats']['avg_memory_usage_mb']:.2f}MB")
         print(f"   MongoDB: {analysis['mongodb_stats']['avg_memory_usage_mb']:.2f}MB")
-        print(f"\n📄 Report generated: {report_file}")
-        print(f"📊 Visualizations: {', '.join(viz_files.values())}")
-        
+        print(f"\n Report generated: {report_file}")
+        print(f" Visualizations: {', '.join(viz_files.values())}")
+
         return 0
         
     except Exception as e:
         logger.error(f"Performance comparison failed: {str(e)}")
-        print(f"\n❌ Error: {str(e)}")
+        print(f"\n Error: {str(e)}")
         return 1
 
 if __name__ == "__main__":
