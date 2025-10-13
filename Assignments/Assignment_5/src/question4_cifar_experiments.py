@@ -493,7 +493,7 @@ class CIFARSequentialTrainer:
         """Run a complete sequential training experiment"""
         print(f"\n{'='*60}")
         print(f"EXPERIMENT: {experiment_name}")
-        print(f" Dataset Order: {' → '.join(dataset_order)}")
+        print(f" Dataset Order: {' -> '.join(dataset_order)}")
         print(f"{'='*60}")
 
         # Create outputs directory for checkpoints and results
@@ -594,15 +594,15 @@ class CIFARSequentialTrainer:
         # 1. Training Progress Comparison
         ax1 = axes[0, 0]
 
-        for exp_name, results in [('Exp A: CIFAR100→CIFAR10', exp_a_results),
-                                  ('Exp B: CIFAR10→CIFAR100', exp_b_results)]:
+        for exp_name, results in [('Exp A: CIFAR100->CIFAR10', exp_a_results),
+                                  ('Exp B: CIFAR10->CIFAR100', exp_b_results)]:
 
             # Plot both phases
             for phase_name, history in results['histories'].items():
                 if 'CIFAR10' in phase_name:
                     color = 'blue' if 'Exp A' in exp_name else 'red'
                     linestyle = '--' if 'phase_2' in phase_name else '-'
-                else: # CIFAR100
+                else:  # CIFAR100
                     color = 'green' if 'Exp A' in exp_name else 'orange'
                     linestyle = '--' if 'phase_2' in phase_name else '-'
 
@@ -624,8 +624,8 @@ class CIFARSequentialTrainer:
         labels = []
 
         for exp_name, results in [('Exp A', exp_a_results), ('Exp B', exp_b_results)]:
-            row_a = [] # After first dataset
-            row_b = [] # After second dataset
+            row_a = []  # After first dataset
+            row_b = []  # After second dataset
 
             for eval_dataset in ['CIFAR10', 'CIFAR100']:
                 # Find evaluations after each phase
@@ -644,9 +644,9 @@ class CIFARSequentialTrainer:
             matrix_data.extend([row_a, row_b])
             labels.extend([f'{exp_name} Phase 1', f'{exp_name} Phase 2'])
 
-        matrix_data = np.array(matrix_data)
+        matrix_np = np.array(matrix_data)
 
-        sns.heatmap(matrix_data, annot=True, fmt='.1f', cmap='YlOrRd',
+        sns.heatmap(matrix_np, annot=True, fmt='.1f', cmap='YlOrRd',
                     xticklabels=['CIFAR-10', 'CIFAR-100'],
                     yticklabels=labels, ax=ax2)
         ax2.set_title('Cross-Evaluation Accuracy Matrix')
@@ -671,7 +671,7 @@ class CIFARSequentialTrainer:
 
             forgetting = initial_performance - final_performance
             forgetting_data.append(forgetting)
-            experiment_names.append(f'{exp_name}\n({first_dataset}→{second_dataset})')
+            experiment_names.append(f'{exp_name}\n({first_dataset}->{second_dataset})')
 
         colors = ['skyblue' if f >= 0 else 'lightcoral' for f in forgetting_data]
         bars = ax3.bar(experiment_names, forgetting_data, color=colors)
@@ -711,8 +711,8 @@ class CIFARSequentialTrainer:
         x = np.arange(len(datasets))
         width = 0.35
 
-        ax4.bar(x - width/2, exp_a_final, width, label='Exp A (CIFAR100→CIFAR10)', alpha=0.7)
-        ax4.bar(x + width/2, exp_b_final, width, label='Exp B (CIFAR10→CIFAR100)', alpha=0.7)
+        ax4.bar(x - width/2, exp_a_final, width, label='Exp A (CIFAR100->CIFAR10)', alpha=0.7)
+        ax4.bar(x + width/2, exp_b_final, width, label='Exp B (CIFAR10->CIFAR100)', alpha=0.7)
 
         ax4.set_xlabel('Dataset')
         ax4.set_ylabel('Final Accuracy (%)')
@@ -734,12 +734,12 @@ class CIFARSequentialTrainer:
         transfer_comparison = []
         labels_transfer = []
 
-        # Exp A: CIFAR-100 → CIFAR-10 transfer
+        # Exp A: CIFAR-100 -> CIFAR-10 transfer
         cifar10_after_cifar100 = exp_a_results['cross_evaluations'].get('after_CIFAR100_on_CIFAR10', {}).get('accuracy', 0)
         transfer_comparison.append(cifar10_after_cifar100)
         labels_transfer.append('CIFAR-10\n(after CIFAR-100)')
 
-        # Exp B: CIFAR-10 → CIFAR-100 transfer
+        # Exp B: CIFAR-10 -> CIFAR-100 transfer
         cifar100_after_cifar10 = exp_b_results['cross_evaluations'].get('after_CIFAR10_on_CIFAR100', {}).get('accuracy', 0)
         transfer_comparison.append(cifar100_after_cifar10)
         labels_transfer.append('CIFAR-100\n(after CIFAR-10)')
@@ -757,7 +757,7 @@ class CIFARSequentialTrainer:
         # 6. Training Time Comparison
         ax6 = axes[1, 2]
 
-        times_a = [exp_a_results['total_time'].total_seconds() / 3600] # Convert to hours
+        times_a = [exp_a_results['total_time'].total_seconds() / 3600]  # Convert to hours
         times_b = [exp_b_results['total_time'].total_seconds() / 3600]
 
         ax6.bar(['Exp A', 'Exp B'], [times_a[0], times_b[0]],
@@ -776,34 +776,31 @@ class CIFARSequentialTrainer:
     def generate_observations_report(self, exp_a_results: Dict, exp_b_results: Dict) -> str:
         """Generate detailed observations report"""
 
-        report = """# CIFAR Sequential Training Experiments - Observations Report (Improved)
-
-## Experimental Setup
-- **Experiment A**: CIFAR-100 (100 epochs) → CIFAR-10 (100 epochs)
-- **Experiment B**: CIFAR-10 (100 epochs) → CIFAR-100 (100 epochs)
-- **Architecture**: Pretrained ResNet18 with separate task-specific classifiers
-- **Key Improvements**: 
-    - Separate classifiers prevent artificial catastrophic forgetting
-    - Pretrained ImageNet features for faster convergence
-    - Phase-aware learning rate scheduling
-    - Proper cross-evaluation without weight destruction
-
-## Key Observations
-
-### 1. Transfer Learning Effects (Properly Measured)
-"""
+        report = (
+            "# CIFAR Sequential Training Experiments - Observations Report (Improved)\n\n"
+            "## Experimental Setup\n"
+            "- **Experiment A**: CIFAR-100 (100 epochs) -> CIFAR-10 (100 epochs)\n"
+            "- **Experiment B**: CIFAR-10 (100 epochs) -> CIFAR-100 (100 epochs)\n"
+            "- **Architecture**: Pretrained ResNet18 with separate task-specific classifiers\n"
+            "- **Key Improvements**: \n"
+            "    - Separate classifiers prevent artificial catastrophic forgetting\n"
+            "    - Pretrained ImageNet features for faster convergence\n"
+            "    - Phase-aware learning rate scheduling\n"
+            "    - Proper cross-evaluation without weight destruction\n\n"
+            "## Key Observations\n\n"
+            "### 1. Transfer Learning Effects (Properly Measured)\n"
+        )
 
         # Get transfer performance
         cifar10_after_cifar100 = exp_a_results['cross_evaluations'].get('after_CIFAR100_on_CIFAR10', {}).get('accuracy', 0)
         cifar100_after_cifar10 = exp_b_results['cross_evaluations'].get('after_CIFAR10_on_CIFAR100', {}).get('accuracy', 0)
 
-        report += f"""
-- **CIFAR-10 after CIFAR-100 training**: {cifar10_after_cifar100:.2f}%
-- **CIFAR-100 after CIFAR-10 training**: {cifar100_after_cifar10:.2f}%
-
-**Analysis**: With proper separate classifiers, we can measure TRUE transfer learning effects.
-CIFAR-100's diverse features should benefit CIFAR-10 classification when shared features adapt.
-"""
+        report += (
+            f"\n- **CIFAR-10 after CIFAR-100 training**: {cifar10_after_cifar100:.2f}%\n"
+            f"- **CIFAR-100 after CIFAR-10 training**: {cifar100_after_cifar10:.2f}%\n\n"
+            "**Analysis**: With proper separate classifiers, we can measure TRUE transfer learning effects.\n"
+            "CIFAR-100's diverse features should benefit CIFAR-10 classification when shared features adapt.\n\n"
+        )
 
         # Catastrophic forgetting analysis
         exp_a_cifar100_initial = exp_a_results['cross_evaluations'].get('after_CIFAR100_on_CIFAR100', {}).get('accuracy', 0)
@@ -814,14 +811,13 @@ CIFAR-100's diverse features should benefit CIFAR-10 classification when shared 
         exp_b_cifar10_final = exp_b_results['cross_evaluations'].get('after_CIFAR100_on_CIFAR10', {}).get('accuracy', 0)
         forgetting_b = exp_b_cifar10_initial - exp_b_cifar10_final
 
-        report += f"""
-### 2. Catastrophic Forgetting (Natural, Not Artificial)
-- **Experiment A (CIFAR-100 forgetting)**: {forgetting_a:.2f}% accuracy drop
-- **Experiment B (CIFAR-10 forgetting)**: {forgetting_b:.2f}% accuracy drop
-
-**Analysis**: This measures REAL catastrophic forgetting due to shared feature adaptation,
-not artificial forgetting from classifier reinitialization. Much more meaningful results!
-"""
+        report += (
+            "### 2. Catastrophic Forgetting (Natural, Not Artificial)\n"
+            f"- **Experiment A (CIFAR-100 forgetting)**: {forgetting_a:.2f}% accuracy drop\n"
+            f"- **Experiment B (CIFAR-10 forgetting)**: {forgetting_b:.2f}% accuracy drop\n\n"
+            "**Analysis**: This measures REAL catastrophic forgetting due to shared feature adaptation,\n"
+            "not artificial forgetting from classifier reinitialization. Much more meaningful results!\n\n"
+        )
 
         # Final performance comparison
         exp_a_final_cifar10 = exp_a_results['cross_evaluations'].get('after_CIFAR10_on_CIFAR10', {}).get('accuracy', 0)
@@ -830,36 +826,32 @@ not artificial forgetting from classifier reinitialization. Much more meaningful
         exp_b_final_cifar10 = exp_b_results['cross_evaluations'].get('after_CIFAR100_on_CIFAR10', {}).get('accuracy', 0)
         exp_b_final_cifar100 = exp_b_results['cross_evaluations'].get('after_CIFAR100_on_CIFAR100', {}).get('accuracy', 0)
 
-        report += f"""
-### 3. Final Performance Summary
-| Dataset   | Exp A (CIFAR100→CIFAR10) | Exp B (CIFAR10→CIFAR100) | Winner  |
-|-----------|--------------------------|--------------------------|---------|
-| CIFAR-10  | {exp_a_final_cifar10:.2f}%                       | {exp_b_final_cifar10:.2f}%                       | {'Exp A' if exp_a_final_cifar10 > exp_b_final_cifar10 else 'Exp B'} |
-| CIFAR-100 | {exp_a_final_cifar100:.2f}%                       | {exp_b_final_cifar100:.2f}%                       | {'Exp A' if exp_a_final_cifar100 > exp_b_final_cifar100 else 'Exp B'} |
-
-### 4. Training Efficiency
-- **Experiment A Duration**: {exp_a_results['total_time']}
-- **Experiment B Duration**: {exp_b_results['total_time']}
-
-### 5. Key Insights
-1. **Proper Architecture**: Separate classifiers enable true transfer learning measurement
-2. **Pretrained Benefits**: ResNet18 ImageNet features accelerate CIFAR convergence significantly
-3. **Natural Forgetting**: Measured catastrophic forgetting reflects real shared feature conflicts
-4. **Phase-aware Training**: Different learning rates for Phase 1 vs Phase 2 improve stability
-
-### 6. Methodological Improvements Made
-- **No Classifier Reinitialization**: Preserve trained weights during task switching
-- **CIFAR-Adapted ResNet18**: Modified conv1 (3×3, stride=1) + removed maxpool for 32×32 images
-- **Updated PyTorch APIs**: ResNet18_Weights.IMAGENET1K_V1 (no deprecation warnings)
-- **Differential Learning Rates**: Lower rates for shared features in Phase 2
-- **Complete Training**: Full 100 epochs per task as specified in assignment
-- **Proper Evaluation**: Cross-evaluation without destroying task-specific weights
-
-### 7. Future Enhancements
-- Implement elastic weight consolidation (EWC) for shared feature regularization
-- Add task-specific batch normalization layers
-- Experiment with progressive neural networks architecture
-"""
+        report += (
+            "### 3. Final Performance Summary\n"
+            "| Dataset   | Exp A (CIFAR100->CIFAR10) | Exp B (CIFAR10->CIFAR100) | Winner  |\n"
+            "|-----------|--------------------------|--------------------------|---------|\n"
+            f"| CIFAR-10  | {exp_a_final_cifar10:.2f}%                       | {exp_b_final_cifar10:.2f}%                       | {'Exp A' if exp_a_final_cifar10 > exp_b_final_cifar10 else 'Exp B'} |\n"
+            f"| CIFAR-100 | {exp_a_final_cifar100:.2f}%                       | {exp_b_final_cifar100:.2f}%                       | {'Exp A' if exp_a_final_cifar100 > exp_b_final_cifar100 else 'Exp B'} |\n\n"
+            "### 4. Training Efficiency\n"
+            f"- **Experiment A Duration**: {exp_a_results['total_time']}\n"
+            f"- **Experiment B Duration**: {exp_b_results['total_time']}\n\n"
+            "### 5. Key Insights\n"
+            "1. **Proper Architecture**: Separate classifiers enable true transfer learning measurement\n"
+            "2. **Pretrained Benefits**: ResNet18 ImageNet features accelerate CIFAR convergence significantly\n"
+            "3. **Natural Forgetting**: Measured catastrophic forgetting reflects real shared feature conflicts\n"
+            "4. **Phase-aware Training**: Different learning rates for Phase 1 vs Phase 2 improve stability\n\n"
+            "### 6. Methodological Improvements Made\n"
+            "- **No Classifier Reinitialization**: Preserve trained weights during task switching\n"
+            "- **CIFAR-Adapted ResNet18**: Modified conv1 (3x3, stride=1) + removed maxpool for 32x32 images\n"
+            "- **Updated PyTorch APIs**: ResNet18_Weights.IMAGENET1K_V1 (no deprecation warnings)\n"
+            "- **Differential Learning Rates**: Lower rates for shared features in Phase 2\n"
+            "- **Complete Training**: Full 100 epochs per task as specified in assignment\n"
+            "- **Proper Evaluation**: Cross-evaluation without destroying task-specific weights\n\n"
+            "### 7. Future Enhancements\n"
+            "- Implement elastic weight consolidation (EWC) for shared feature regularization\n"
+            "- Add task-specific batch normalization layers\n"
+            "- Experiment with progressive neural networks architecture\n"
+        )
 
         return report
 
@@ -914,7 +906,7 @@ def main():
         observations = trainer.generate_observations_report(exp_a_results, exp_b_results)
 
         # Save results
-        with open('outputs/question4_observations_report.md', 'w') as f:
+        with open('outputs/question4_observations_report.md', 'w', encoding='utf-8') as f:
             f.write(observations)
 
         import pickle
