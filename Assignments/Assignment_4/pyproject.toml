@@ -1,0 +1,81 @@
+[project]
+name = "assignment-4-database-comparison"
+version = "0.1.0"
+description = "UCI Online Retail Dataset: SQL vs MongoDB Performance Comparison"
+requires-python = ">=3.8"
+authors = [
+    {name = "MLOps Student", email = "student@example.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+keywords = ["database", "mongodb", "sql", "performance", "comparison"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    "pandas>=1.5.0",
+    "openpyxl>=3.0.0",
+    "pymongo>=4.0.0",
+    "dnspython>=2.0.0",
+    "matplotlib>=3.5.0",
+    "seaborn>=0.11.0",
+    "psutil>=5.8.0",
+    "tqdm>=4.60.0",
+    "python-dotenv>=0.19.0",
+    "reportlab>=3.6.0",
+    "numpy>=1.21.0",
+    "sqlalchemy>=1.4.0",
+    "plotly>=5.0.0",
+    "rich>=12.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "flake8>=5.0.0",
+    "mypy>=0.991",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-username/assignment-4-database-comparison"
+Repository = "https://github.com/your-username/assignment-4-database-comparison"
+Documentation = "https://github.com/your-username/assignment-4-database-comparison#readme"
+"Bug Tracker" = "https://github.com/your-username/assignment-4-database-comparison/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.black]
+line-length = 88
+target-version = ["py38"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --cov=src"
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.uv]
+dev-dependencies = [
+    "jupyter>=1.0.0",
+    "ipykernel>=6.0.0",
+]
