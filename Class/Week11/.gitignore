@@ -1,0 +1,6 @@
+wandb/
+
+rf_model.joblib
+__pycache__/
+.ipynb_checkpoints/
+
